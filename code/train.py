@@ -24,7 +24,7 @@ from tqdm import tqdm
 
 input_length = 16000*2
 
-batch_size = 32
+batch_size = 8
 
 def audio_norm(data):
 
