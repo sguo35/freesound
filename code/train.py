@@ -69,16 +69,14 @@ train_labels = pd.read_csv("../input/train.csv")
 file_to_label = {"../input/audio_train/"+k:v for k,v in zip(train_labels.fname.values, train_labels.label.values)}
 
 data_base = load_audio_file(train_files[0])
-fig = plt.figure(figsize=(14, 8))
-plt.title('Raw wave : %s ' % (file_to_label[train_files[0]]))
-plt.ylabel('Amplitude')
-plt.plot(np.linspace(0, 1, input_length), data_base)
-plt.show()
+
 list_labels = sorted(list(set(train_labels.label.values)))
 label_to_int = {k:v for v,k in enumerate(list_labels)}
 
 int_to_label = {v:k for k,v in label_to_int.items()}
 file_to_int = {k:label_to_int[v] for k,v in file_to_label.items()}
+
+
 def chunker(seq, size):
     return (seq[pos:pos + size] for pos in range(0, len(seq), size))
 
@@ -97,9 +95,9 @@ tr_files, val_files = train_test_split(train_files, test_size=0.1)
 
 nclass = len(list_labels)
 from wide_res_net import create_wide_residual_network
-model = create_wide_residual_network(input_dim=(32000, 1), nb_classes=nclass, N=4, k=10, dropout=0.3)
+model = create_wide_residual_network(input_dim=(32000, 1), nb_classes=nclass, N=4, k=8, dropout=0.3)
 print(model.summary())
-
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['acc'])
 
 import memory_saving_gradients
 from keras import backend as K

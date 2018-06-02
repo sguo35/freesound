@@ -1,6 +1,6 @@
 from keras.models import Model
 from keras.layers import Input, Add, Activation, Dropout, Flatten, Dense
-from keras.layers.convolutional import Convolution1D, MaxPooling1D, AveragePooling1D
+from keras.layers.convolutional import Convolution1D, MaxPooling1D, AveragePooling1D, GlobalAveragePooling1D
 from keras.layers.normalization import BatchNormalization
 from keras import backend as K
 
@@ -141,8 +141,7 @@ def create_wide_residual_network(input_dim, nb_classes=100, N=2, k=1, dropout=0.
     x = BatchNormalization(momentum=0.1, epsilon=1e-5, gamma_initializer='uniform')(x)
     x = Activation('relu')(x)
     
-    x = AveragePooling1D(8)(x)
-    x = Flatten()(x)
+    x = GlobalAveragePooling1D()(x)
 
     x = Dense(nb_classes, activation='softmax')(x)
 
